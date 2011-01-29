@@ -5,12 +5,10 @@ require 'dispatcher'
 Dispatcher.to_prepare do
   require_dependency 'time_entry'
   TimeEntry.after_create do |time_entry| 
-  
-    config = YAML::load(File.read(RAILS_ROOT + "/config/harvest.yml"))
-    harvest = Harvest.hardy_client(config["domain"], config["email"], config["password"])
-    
+      
     harvest_user_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_user_id']
     harvest_project_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_project_id']
+    harvest_task_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_task_id']
     
     # harvest user id 
     custom_value = time_entry.user.custom_values.detect {|v| v.custom_field_id == harvest_user_id_custom_id.to_i}
@@ -23,10 +21,13 @@ Dispatcher.to_prepare do
     # harvest task id 
     custom_value = time_entry.activity.custom_values.detect {|v| v.custom_field_id == harvest_task_id_custom_id.to_i}
     harvest_task_id = custom_value.value.to_i if custom_value
-    
-    time = Harvest::TimeEntry.new(:notes => time_entry.comments, :hours => time_entry.hours, :project_id => harvest_project_id, :task_id => harvest_task_id, :of_user => harvest_user_id)
 
-    harvest.time.create(time) rescue nil
+    if harvest_user_id && harvest_project_id && harvest_task_id
+      time = Harvest::TimeEntry.new(:notes => time_entry.comments, :hours => time_entry.hours, :project_id => harvest_project_id, :task_id => harvest_task_id, :of_user => harvest_user_id)
+      config = YAML::load(File.read(RAILS_ROOT + "/config/harvest.yml"))
+      harvest = Harvest.hardy_client(config["domain"], config["email"], config["password"])
+      harvest.time.create(time) 
+    end rescue nil
   end
 end
 

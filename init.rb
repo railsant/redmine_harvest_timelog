@@ -40,7 +40,7 @@ Dispatcher.to_prepare do
   end
 end
 
-redmine_harvest_timelog_config = YAML::load(File.read(RAILS_ROOT + "/config/harvest.yml"))
+# redmine_harvest_timelog_config = YAML::load(File.read(RAILS_ROOT + "/config/harvest.yml"))
 
 Redmine::Plugin.register :redmine_harvest_timelog do
   name 'Redmine Harvest Time log plugin'
@@ -55,9 +55,9 @@ Redmine::Plugin.register :redmine_harvest_timelog do
     'harvest_project_id' => '',
     'harvest_user_id' => '', 
     'harvest_task_id' => '', 
-    'harvest_domain' => redmine_harvest_timelog_config["domain"], 
-    'harvest_email' => redmine_harvest_timelog_config["email"], 
-    'harvest_password' => redmine_harvest_timelog_config["password"], 
+    'harvest_domain' => '',#redmine_harvest_timelog_config["domain"], 
+    'harvest_email' => '', #redmine_harvest_timelog_config["email"], 
+    'harvest_password' => '', #redmine_harvest_timelog_config["password"], 
   }, :partial => 'settings/harvest_settings'
   
 end

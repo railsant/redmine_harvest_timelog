@@ -1,3 +1,20 @@
+<h3>Account Setting</h3>
+<p>
+  <label>Harvest Domain</label>
+  <%= text_field_tag 'settings[harvest_domain]',@settings['harvest_domain'] %><br />
+</p>
+
+<p>
+  <label>Harvest Email</label>
+  <%= text_field_tag 'settings[harvest_email]',@settings['harvest_email'] %><br />
+</p>
+
+<p>
+  <label>Harvest Password</label>
+  <%= password_field_tag 'settings[harvest_password]',@settings['harvest_password'] %><br />
+</p>
+
+<h3>Custom Field Setting</h3>
 <% project_fields = ProjectCustomField.find :all %>
 
 This will allow you to tie Harvest project IDs to Redmine projects. 

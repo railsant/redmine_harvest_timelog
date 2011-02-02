@@ -1,11 +1,11 @@
 require 'redmine'
 require 'dispatcher'
 
-['harvested'].each do |gem|
+['harvested'].each do |gem_name|
   begin
-    require gem
+    require gem_name
   rescue LoadError
-    raise "You are missing the '#{gem}' gem"
+    raise "You are missing the #{gem_name} gem"
   end
 end
 
@@ -33,7 +33,8 @@ Dispatcher.to_prepare do
     harvest_task_id = custom_value.value.to_i if custom_value
 
     if harvest_user_id && harvest_project_id && harvest_task_id
-      time = Harvest::TimeEntry.new(:notes => time_entry.comments, :hours => time_entry.hours, :project_id => harvest_project_id, :task_id => harvest_task_id, :of_user => harvest_user_id)
+      note = time_entry.issue.present? ? "#{time_entry.issue.to_s} (#{time_entry.comments})" : time_entry.comments
+      time = Harvest::TimeEntry.new(:notes => note, :hours => time_entry.hours, :project_id => harvest_project_id, :task_id => harvest_task_id, :of_user => harvest_user_id)
       harvest = Harvest.hardy_client(harvest_domain, harvest_email, harvest_password)
       harvest.time.create(time) 
     end rescue nil

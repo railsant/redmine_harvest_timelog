@@ -29,8 +29,10 @@ Dispatcher.to_prepare do
     custom_value = time_entry.project.custom_values.detect {|v| v.custom_field_id == harvest_project_id_custom_id.to_i}
     harvest_project_id = custom_value.value.to_i if custom_value
     
-    custom_value = time_entry.issue.fixed_version.custom_values.detect {|v| v.custom_field_id == harvest_version_project_id_custom_id.to_i}
-    harvest_project_id = custom_value.value.to_i if custom_value
+    if time_entry.issue.present? && time_entry.issue.fixed_version.present?
+      custom_value = time_entry.issue.fixed_version.custom_values.detect {|v| v.custom_field_id == harvest_version_project_id_custom_id.to_i}
+      harvest_project_id = custom_value.value.to_i if custom_value
+    end
     
     # harvest task id 
     custom_value = time_entry.activity.custom_values.detect {|v| v.custom_field_id == harvest_task_id_custom_id.to_i}

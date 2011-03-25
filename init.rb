@@ -29,7 +29,7 @@ Dispatcher.to_prepare do
     custom_value = time_entry.project.custom_values.detect {|v| v.custom_field_id == harvest_project_id_custom_id.to_i}
     harvest_project_id = custom_value.value.to_i if custom_value
     
-    custom_value = time_entry.project.version.custom_values.detect {|v| v.custom_field_id == harvest_version_project_id_custom_id.to_i}
+    custom_value = time_entry.issue.fixed_version.custom_values.detect {|v| v.custom_field_id == harvest_version_project_id_custom_id.to_i}
     harvest_project_id = custom_value.value.to_i if custom_value
     
     # harvest task id 

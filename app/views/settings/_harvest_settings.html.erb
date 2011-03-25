@@ -27,6 +27,18 @@ Goto 'Admin -> Custom fields -> Projects' and create a field of type 'integer'.
                  options_from_collection_for_select(project_fields, :id, :name, @settings['harvest_project_id'].to_i) %><br />
 </p>
 
+<% version_fields = VersionCustomField.find :all %>
+
+This will allow you to tie Harvest project IDs to Redmine projects Version. 
+Goto 'Admin -> Custom fields -> Versions' and create a field of type 'integer'.
+
+<p>
+  <label>Harvest Project ID (Version)</label>
+  <%= select_tag 'settings[harvest_version_project_id]',
+                 '<option value="">(Select one)</option>' +
+                 options_from_collection_for_select(version_fields, :id, :name, @settings['harvest_version_project_id'].to_i) %><br />
+</p>
+
 <% activity_fields = TimeEntryActivityCustomField.find :all %>
 
 This will allow you to tie Harvest Task IDs to Redmine Activities (Time Tracking). 

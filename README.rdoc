@@ -1,3 +1,0 @@
-= harvest_timelog
-
-Description goes here

@@ -15,6 +15,7 @@ Dispatcher.to_prepare do
       
     harvest_user_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_user_id']
     harvest_project_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_project_id']
+    harvest_version_project_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_version_project_id']
     harvest_task_id_custom_id = Setting.plugin_redmine_harvest_timelog['harvest_task_id']
     harvest_domain = Setting.plugin_redmine_harvest_timelog['harvest_domain']
     harvest_email = Setting.plugin_redmine_harvest_timelog['harvest_email']
@@ -24,8 +25,11 @@ Dispatcher.to_prepare do
     custom_value = time_entry.user.custom_values.detect {|v| v.custom_field_id == harvest_user_id_custom_id.to_i}
     harvest_user_id = custom_value.value.to_i if custom_value
     
-    # harvest project id 
+    # harvest project id (priority version project > project)
     custom_value = time_entry.project.custom_values.detect {|v| v.custom_field_id == harvest_project_id_custom_id.to_i}
+    harvest_project_id = custom_value.value.to_i if custom_value
+    
+    custom_value = time_entry.project.version.custom_values.detect {|v| v.custom_field_id == harvest_version_project_id_custom_id.to_i}
     harvest_project_id = custom_value.value.to_i if custom_value
     
     # harvest task id 
@@ -47,13 +51,14 @@ Redmine::Plugin.register :redmine_harvest_timelog do
   name 'Redmine Harvest Time log plugin'
   author 'Benjamin Wong'
   description 'This is a plugin for Redmine to export project timelog data to Harvest.'
-  version '0.0.2'
-  # url 'http://example.com/path/to/plugin'
-  # author_url 'http://example.com/about'
+  version '0.0.3'
+  url 'https://github.com/inspiresynergy/redmine_harvest_timelog'
+  author_url 'http://www.inspiresynergy.com'
   
   # This plugin contains settings
   settings :default => {
     'harvest_project_id' => '',
+    'harvest_version_project_id' => '',
     'harvest_user_id' => '', 
     'harvest_task_id' => '', 
     'harvest_domain' => '',#redmine_harvest_timelog_config["domain"], 

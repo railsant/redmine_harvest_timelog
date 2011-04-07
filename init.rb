@@ -23,20 +23,20 @@ Dispatcher.to_prepare do
     
     # harvest user id 
     custom_value = time_entry.user.custom_values.detect {|v| v.custom_field_id == harvest_user_id_custom_id.to_i}
-    harvest_user_id = custom_value.value.to_i if custom_value
+    harvest_user_id = custom_value.value.present? ? custom_value.value.to_i : false
     
     # harvest project id (priority version project > project)
     custom_value = time_entry.project.custom_values.detect {|v| v.custom_field_id == harvest_project_id_custom_id.to_i}
-    harvest_project_id = custom_value.value.to_i if custom_value
+    harvest_project_id = custom_value.value.present? ? custom_value.value.to_i : false
     
     if time_entry.issue.present? && time_entry.issue.fixed_version.present?
       custom_value = time_entry.issue.fixed_version.custom_values.detect {|v| v.custom_field_id == harvest_version_project_id_custom_id.to_i}
-      harvest_project_id = custom_value.value.to_i if custom_value
+      harvest_project_id = custom_value.value.present? ? custom_value.value.to_i : false
     end
     
     # harvest task id 
     custom_value = time_entry.activity.custom_values.detect {|v| v.custom_field_id == harvest_task_id_custom_id.to_i}
-    harvest_task_id = custom_value.value.to_i if custom_value
+    harvest_task_id = custom_value.value.present? ? custom_value.value.to_i : false
 
     if harvest_user_id && harvest_project_id && harvest_task_id
       note = time_entry.issue.present? ? "#{time_entry.issue.to_s} (#{time_entry.comments})" : time_entry.comments

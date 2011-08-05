@@ -41,18 +41,10 @@ After you have completed the Installation and configuration of the plugin, when 
 
 ## Changelog
 
-### 0.1.0
+### 0.0.4
 
-- migration to Redmine 0.9.x
-- new conditions (owners, authors, statuses and projects)
-- conditions in burndown chart
-- multiselection in conditions (#3)
-- new issue chart (#2)
-- issues with closed status are considered as 100% complete (#1)
-- new translations (ko, da, de)
-- new chart - burndown with velocity (#12)
-- support for subissues (#36)
-- saved condition (#24)
+- Support Time Entry Edit/Destroy (also edit/sync to Harvest)
+- Fix Time Entry time problem
 
 ### 0.0.3
 

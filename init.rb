@@ -60,7 +60,7 @@ Dispatcher.to_prepare do
     if harvest_user_id && harvest_project_id && harvest_task_id
       harvest = Harvest.hardy_client(harvest_domain, harvest_email, harvest_password)
       
-      time = harvest.time.find(time_entry.harvest_timelog_id) rescue Harvest::TimeEntry.new
+      time = harvest.time.find(time_entry.harvest_timelog_id, harvest_user_id) rescue Harvest::TimeEntry.new
       time.notes = harvest_note
       time.hours = time_entry.hours
       time.project_id = harvest_project_id

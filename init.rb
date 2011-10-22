@@ -3,10 +3,11 @@ require 'dispatcher'
 
 ['harvested'].each do |gem_name|
   begin
-    require gem_name
+    require gem_name 
   rescue LoadError
     raise "You are missing the #{gem_name} gem"
   end
+   Kernel.warn "This plugin is designed for Harvested gems 0.4.0, it won't guarantee it works!" unless Harvest::Version == '0.4.0'
 end
 
 Dispatcher.to_prepare do
@@ -66,9 +67,9 @@ Dispatcher.to_prepare do
       time.project_id = harvest_project_id
       time.task_id = harvest_task_id
       time.of_user = harvest_user_id
-      time.spent_at = harvest_spent_at
+      time.spent_at = harvest_spent_at.to_time
       
-      harvest_timelog = time.id.blank? ? harvest.time.create(time) : harvest.time.update(time)
+      harvest_timelog = time.id.blank? ? harvest.time.create(time,harvest_user_id) : harvest.time.update(time,harvest_user_id) rescue nil # rescue the harvested error
       
       TimeEntry.update_all ['harvest_timelog_id = ?', harvest_timelog.id ], ['id = ?', time_entry.id]
     end

@@ -1,6 +1,8 @@
 require 'redmine'
 require 'dispatcher'
 require 'active_support'
+require 'active_support/core_ext'
+
 
 Dispatcher.to_prepare do
   require_dependency 'time_entry'
@@ -73,13 +75,20 @@ Dispatcher.to_prepare do
         <spent_at type="date">#{harvest_spent_at.to_date}</spent_at>
       </request>}
       
-      # create or update
+      # create or update 
+      # FIXME : DRY it 
       if time_entry.harvest_timelog_id
-        harvest.request "/daily/update/#{time_entry.harvest_timelog_id}?of_user=#{harvest_user_id}", :post, request
+        # Try update it directly. if 404, then clean it up and update with new harvest_timelog id
+        begin 
+          harvest.request "/daily/update/#{time_entry.harvest_timelog_id}?of_user=#{harvest_user_id}", :post, request
+        rescue Exception => e 
+          response = harvest.request "/daily/add?of_user=#{harvest_user_id}", :post, request
+          time_entry.update_attribute :harvest_timelog_id, Hash.from_xml(response.body)['add']['day_entry']['id']
+        end
       else
-        harvest.request "/daily/add?of_user=#{harvest_user_id}", :post, request
+        response = harvest.request "/daily/add?of_user=#{harvest_user_id}", :post, request
+        time_entry.update_attribute :harvest_timelog_id, Hash.from_xml(response.body)['add']['day_entry']['id']
       end
-      
     end
   end
 end

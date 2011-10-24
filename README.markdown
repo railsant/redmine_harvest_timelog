@@ -10,7 +10,7 @@ Install the plugin as described at: http://www.redmine.org/wiki/redmine/Plugins,
 Download the sources and put them to your vendor/plugins folder.
 
     $ cd {REDMINE_ROOT}
-    $ git clone git://github.com/inspiresynergy/redmine_charts.git vendor/plugins/redmine_harvest_timelog
+    $ git clone git://github.com/railsant/redmine_charts.git vendor/plugins/redmine_harvest_timelog
 
 Install harvestd gems. 
 
@@ -40,6 +40,10 @@ Before you can actually use the plugin within the preferred projects some setup 
 After you have completed the Installation and configuration of the plugin, when you enter a timelog in redmine, it will also post the timelog to Harvest with the same comment. However when you remove a timelog it cannot remove accordingly.
 
 ## Changelog
+
+### 0.0.5
+
+- Eliminate the gem dependency of Harvested Gems (due to the time entry update problem)
 
 ### 0.0.4
 

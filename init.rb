@@ -68,7 +68,7 @@ Dispatcher.to_prepare do
       
       # Build the Request String
       request = %Q{<request>
-        <notes>#{harvest_note}</notes>
+        <notes>#{CGI::escapeHTML(harvest_note)}</notes>
         <hours>#{time_entry.hours}</hours>
         <project_id type="integer">#{harvest_project_id}</project_id>
         <task_id type="integer">#{harvest_task_id}</task_id>
